@@ -20,7 +20,7 @@ service.interceptors.request.use(
   config => {
     const token = store.state.user.token;
     if (token) {
-      config.headers.Authorization = token;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -36,11 +36,15 @@ service.interceptors.response.use(
     if (res.success) {
       return res;
     } else {
-      throw new Error(res.msg);
+      throw res.msg;
     }
   },
-  error => {
-    return Promise.reject(error);
+  async error => {
+    if (error.response.status === 401) {
+      await store.dispatch('LocalLogout');
+      throw '登录过期，请重新登录';
+    }
+    throw error;
   }
 );
 

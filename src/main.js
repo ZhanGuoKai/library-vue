@@ -4,10 +4,15 @@ import Vue from 'vue';
 import App from './App';
 import store from './store';
 import router from './router';
+import axios from 'axios';
 import ElementUI from 'element-ui';
+import './filters'; // 导入全局过滤器
 import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.config.productionTip = false;
+
+// 全局挂载axios
+Vue.prototype.$http = axios;
 
 Vue.use(ElementUI);
 
